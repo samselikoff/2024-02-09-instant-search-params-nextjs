@@ -1,55 +1,45 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useOptimistic, useTransition } from "react";
 
 export function Tags({ tags }: { tags: string[] }) {
-  let searchParams = useSearchParams();
-  let clientTags = !searchParams.get("tag") ? [] : searchParams.getAll("tag");
-
+  const [optimisticTags, addOptimistic] = useOptimistic<string[], string[]>(
+    tags,
+    (currentState, optimisticValue) => {
+      return optimisticValue;
+    }
+  );
   let router = useRouter();
-
-  let [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    // let newParams = new URLSearchParams(window.location.search);
-    // newParams.delete("tag");
-    // let clientTags = !searchParams.get("tag") ? [] : searchParams.getAll("tag");
-
-    // for (let tag of clientTags) {
-    //   newParams.append("tag", tag);
-    // }
-
-    console.log("here");
-    startTransition(() => {
-      router.refresh();
-    });
-  }, [router, searchParams]);
+  let [pending, startTransition] = useTransition();
 
   function removeTag(value: string) {
-    let newTags = clientTags.filter((tag) => tag !== value);
+    let newTags = optimisticTags.filter((tag) => tag !== value);
     pushTags(newTags);
   }
 
   function addTag(value: string) {
-    let newTags = [...clientTags, value];
+    let newTags = [...optimisticTags, value];
     pushTags(newTags);
   }
 
   function pushTags(tags: string[]) {
     let newParams = new URLSearchParams(window.location.search);
     newParams.delete("tag");
-
     for (let tag of tags) {
       newParams.append("tag", tag);
     }
 
-    window.history.pushState(null, "", `?${newParams}`);
+    startTransition(() => {
+      addOptimistic(tags);
+
+      router.push(`?${newParams}`);
+    });
   }
 
   return (
     <div className="grid grid-cols-2 max-w-md mx-auto min-h-screen gap-4">
-      <div className={`p-4 ${isPending ? "opacity-50" : ""}`}>
+      <div className={`p-4 ${pending ? "opacity-50" : ""}`}>
         <div>
           <div>Params (server):</div>
           <div>
@@ -66,9 +56,10 @@ export function Tags({ tags }: { tags: string[] }) {
         {Array.from(Array(10).keys()).map((i) => (
           <label key={i} className="flex gap-2 items-center">
             <input
-              checked={clientTags.includes(`${i}`)}
+              checked={optimisticTags.includes(`${i}`)}
               onChange={(e) => {
                 let { name, checked } = e.target;
+
                 if (checked) {
                   addTag(name);
                 } else {
@@ -83,9 +74,9 @@ export function Tags({ tags }: { tags: string[] }) {
         ))}
 
         <div>
-          <div>Params (client):</div>
+          <div>Params (optimistic):</div>
           <div>
-            {clientTags.map((tag) => (
+            {optimisticTags.map((tag) => (
               <p key={tag}>{tag}</p>
             ))}
           </div>
