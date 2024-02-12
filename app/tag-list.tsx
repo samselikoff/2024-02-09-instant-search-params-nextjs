@@ -75,7 +75,7 @@ export default function TagList({ tags }: { tags: string[] }) {
         </div>
 
         <div className="mt-4">
-          <div>Params (optimistic):</div>
+          <div>Params (client):</div>
           <div>
             {optimisticTags.map((tag) => (
               <p key={tag}>{tag}</p>
