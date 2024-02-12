@@ -1,4 +1,4 @@
-import TagList from "./tag-list";
+import TagList from "./v6-use-optimistic/tag-list";
 
 export default async function Home({
   searchParams,
