@@ -1,4 +1,4 @@
-import Sidebar from "./sidebar";
+import TagList from "./tag-list";
 
 export default async function Home({
   searchParams,
@@ -11,18 +11,8 @@ export default async function Home({
     ? [searchParams.tag]
     : searchParams.tag;
 
+  // Fetch the content...
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  return (
-    <Sidebar tags={tags}>
-      <div>
-        <div>Params (server):</div>
-        <div>
-          {tags.map((tag) => (
-            <p key={tag}>{tag}</p>
-          ))}
-        </div>
-      </div>
-    </Sidebar>
-  );
+  return <TagList tags={tags} />;
 }

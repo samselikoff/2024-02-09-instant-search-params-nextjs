@@ -1,15 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ReactNode, useOptimistic, useTransition } from "react";
+import { useOptimistic, useTransition } from "react";
 
-export default function Sidebar({
-  tags,
-  children,
-}: {
-  tags: string[];
-  children: ReactNode;
-}) {
+export default function TagList({ tags }: { tags: string[] }) {
   let router = useRouter();
   let [pending, startTransition] = useTransition();
   let [optimisticTags, setOptimsticTags] = useOptimistic(tags);
@@ -38,7 +32,14 @@ export default function Sidebar({
       <div
         className={`p-4 ml-auto ${pending ? "opacity-50 delay-[60ms]" : ""}`}
       >
-        {children}
+        <div>
+          <div>Params (server):</div>
+          <div>
+            {tags.map((tag) => (
+              <p key={tag}>{tag}</p>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="bg-gray-300 p-4">
