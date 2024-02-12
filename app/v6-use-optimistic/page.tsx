@@ -1,4 +1,4 @@
-import { Tags } from "./tags";
+import Sidebar from "./sidebar";
 
 export default async function Home({
   searchParams,
@@ -13,5 +13,16 @@ export default async function Home({
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  return <Tags tags={tags} />;
+  return (
+    <Sidebar tags={tags}>
+      <div>
+        <div>Params (server):</div>
+        <div>
+          {tags.map((tag) => (
+            <p key={tag}>{tag}</p>
+          ))}
+        </div>
+      </div>
+    </Sidebar>
+  );
 }
