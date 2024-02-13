@@ -23,47 +23,36 @@ export default function TagList({ tags }: { tags: string[] }) {
 
     startTransition(() => {
       setOptimsticTags(tags);
-      router.push(`?${newParams}`);
+
+      router.push(`?${newParams}`, { scroll: false });
     });
   }
 
   return (
-    <div className="grid grid-cols-2 min-h-screen gap-4">
-      <div
-        className={`p-4 ml-auto ${pending ? "opacity-50 delay-[60ms]" : ""}`}
-      >
-        <div>
-          <div>Params (server):</div>
-          <div>
-            {tags.map((tag) => (
-              <p key={tag}>{tag}</p>
-            ))}
-          </div>
+    <div className="flex h-screen relative gap-4">
+      <div className="sticky top-0 overflow-y-scroll w-60 bg-gray-700 p-4">
+        <p>Client:</p>
+
+        <div className="mt-4">
+          {Array.from(Array(10).keys()).map((i) => (
+            <label key={i} className="flex gap-2 items-center">
+              <input
+                checked={optimisticTags.includes(`${i}`)}
+                onChange={(e) => {
+                  let { name, checked } = e.target;
+                  if (checked) {
+                    addTag(name);
+                  } else {
+                    removeTag(name);
+                  }
+                }}
+                type="checkbox"
+                name={`${i}`}
+              />
+              Tag {i}
+            </label>
+          ))}
         </div>
-      </div>
-
-      <div className="bg-gray-700 p-4">
-        <p className="font-medium text-sm leading-6">Filter:</p>
-
-        {Array.from(Array(10).keys()).map((i) => (
-          <label key={i} className="flex gap-2 items-center">
-            <input
-              checked={optimisticTags.includes(`${i}`)}
-              onChange={(e) => {
-                let { name, checked } = e.target;
-
-                if (checked) {
-                  addTag(name);
-                } else {
-                  removeTag(name);
-                }
-              }}
-              type="checkbox"
-              name={`${i}`}
-            />{" "}
-            Tag {i}
-          </label>
-        ))}
 
         <div className="mt-4">
           <button
@@ -78,6 +67,16 @@ export default function TagList({ tags }: { tags: string[] }) {
           <div>Params (client):</div>
           <div>
             {optimisticTags.map((tag) => (
+              <p key={tag}>{tag}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className={`${pending ? "opacity-50 delay-[60ms]" : ""} p-4`}>
+        <div>
+          <div>Params (server):</div>
+          <div>
+            {tags.map((tag) => (
               <p key={tag}>{tag}</p>
             ))}
           </div>

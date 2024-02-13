@@ -3,7 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
 
-export default function TagList({ tags }: { tags: string[] }) {
+export default function TagList({
+  tags,
+  urlSearchParams,
+}: {
+  tags: string[];
+  urlSearchParams: string;
+}) {
+  console.log(urlSearchParams);
   let router = useRouter();
   let [pending, startTransition] = useTransition();
   let [optimisticTags, setOptimsticTags] = useOptimistic(tags);
@@ -28,21 +35,8 @@ export default function TagList({ tags }: { tags: string[] }) {
   }
 
   return (
-    <div className="grid grid-cols-2 min-h-screen gap-4">
-      <div
-        className={`p-4 ml-auto ${pending ? "opacity-50 delay-[60ms]" : ""}`}
-      >
-        <div>
-          <div>Params (server):</div>
-          <div>
-            {tags.map((tag) => (
-              <p key={tag}>{tag}</p>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-gray-700 p-4">
+    <div className="flex min-h-screen gap-4">
+      <div className="w-60 bg-gray-700 p-4">
         <p className="font-medium text-sm leading-6">Filter:</p>
 
         {Array.from(Array(10).keys()).map((i) => (
@@ -78,6 +72,16 @@ export default function TagList({ tags }: { tags: string[] }) {
           <div>Params (client):</div>
           <div>
             {optimisticTags.map((tag) => (
+              <p key={tag}>{tag}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className={`${pending ? "opacity-50 delay-[60ms]" : ""} p-4`}>
+        <div>
+          <div>Params (server):</div>
+          <div>
+            {tags.map((tag) => (
               <p key={tag}>{tag}</p>
             ))}
           </div>
