@@ -3,53 +3,57 @@
 import { useRouter } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
 
-export default function TagList({ tags }: { tags: string[] }) {
+export default function TagList({ genres }: { genres: string[] }) {
   let router = useRouter();
   let [pending, startTransition] = useTransition();
-  let [optimisticTags, setOptimsticTags] = useOptimistic(tags);
+  let [optimisticGenres, setOptimisticGenres] = useOptimistic(genres);
 
-  function removeTag(value: string) {
-    let newTags = optimisticTags.filter((tag) => tag !== value);
-    pushTags(newTags);
+  function removeGenre(value: string) {
+    let newGenres = optimisticGenres.filter((genre) => genre !== value);
+    pushGenres(newGenres);
   }
 
-  function addTag(value: string) {
-    let newTags = [...optimisticTags, value];
-    pushTags(newTags);
+  function addGenre(value: string) {
+    let newGenres = [...optimisticGenres, value];
+    pushGenres(newGenres);
   }
 
-  function pushTags(tags: string[]) {
-    let newParams = new URLSearchParams(tags.map((tag) => ["tag", tag]));
+  function pushGenres(genres: string[]) {
+    let newParams = new URLSearchParams(
+      genres.map((genre) => ["genre", genre])
+    );
 
     startTransition(() => {
-      setOptimsticTags(tags);
+      setOptimisticGenres(genres);
 
       router.push(`?${newParams}`, { scroll: false });
     });
   }
 
   return (
-    <div className="flex h-screen relative gap-4">
-      <div className="sticky top-0 overflow-y-scroll w-60 bg-gray-700 p-4">
-        <p>Client:</p>
+    <div className="shrink-0">
+      <div className="sticky top-0 w-60 bg-gray-600 rounded-lg p-4">
+        <h2 className="text-gray-100 tracking-tight font-semibold text-xl">
+          Genre
+        </h2>
 
         <div className="mt-4">
-          {Array.from(Array(10).keys()).map((i) => (
-            <label key={i} className="flex gap-2 items-center">
+          {GENRES.map((genre) => (
+            <label key={genre} className="flex gap-2 items-center">
               <input
-                checked={optimisticTags.includes(`${i}`)}
+                checked={optimisticGenres.includes(genre)}
                 onChange={(e) => {
                   let { name, checked } = e.target;
                   if (checked) {
-                    addTag(name);
+                    addGenre(name);
                   } else {
-                    removeTag(name);
+                    removeGenre(name);
                   }
                 }}
                 type="checkbox"
-                name={`${i}`}
+                name={genre}
               />
-              Tag {i}
+              {genre}
             </label>
           ))}
         </div>
@@ -57,31 +61,55 @@ export default function TagList({ tags }: { tags: string[] }) {
         <div className="mt-4">
           <button
             className="bg-gray-100 px-2 text-sm font-medium py-1 text-gray-900 hover:bg-white rounded"
-            onClick={() => pushTags([])}
+            onClick={() => pushGenres([])}
           >
             Clear
           </button>
         </div>
 
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <div>Params (client):</div>
           <div>
-            {optimisticTags.map((tag) => (
-              <p key={tag}>{tag}</p>
+            {optimisticGenres.map((genre) => (
+              <p key={genre}>{genre}</p>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className={`${pending ? "opacity-50 delay-[60ms]" : ""} p-4`}>
+      {/* <div className={`${pending ? "opacity-50 delay-[60ms]" : ""} p-4`}>
+      <div>
+        <div>Params (server):</div>
         <div>
-          <div>Params (server):</div>
-          <div>
-            {tags.map((tag) => (
-              <p key={tag}>{tag}</p>
-            ))}
-          </div>
+          {tags.map((tag) => (
+            <p key={tag}>{tag}</p>
+          ))}
         </div>
       </div>
+    </div> */}
     </div>
   );
 }
+
+const GENRES = [
+  "Action",
+  "Adventure",
+  "Animation",
+  "Biography",
+  "Comedy",
+  "Crime",
+  "Drama",
+  "Family",
+  "Fantasy",
+  "Film-Noir",
+  "History",
+  "Horror",
+  "Music",
+  "Musical",
+  "Mystery",
+  "Romance",
+  "Sci-Fi",
+  "Sport",
+  "Thriller",
+  "War",
+  "Western",
+];
