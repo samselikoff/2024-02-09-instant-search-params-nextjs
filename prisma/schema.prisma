@@ -3,29 +3,23 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-model actors {
-  id       Int    @id @default(autoincrement())
-  movie_id Int
-  imdb_id  String
-  name     String
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model movies {
-  id               Int     @id @default(autoincrement())
-  imdb_id          String
-  title            String
-  director         String
+  id               Int     @id
+  imdb_id          String  @db.VarChar(20)
+  title            String  @db.VarChar(255)
+  director         String  @db.VarChar(255)
   year             Int
-  rating           String
-  genres           String
+  rating           String  @db.VarChar(10)
+  genres           String  @db.VarChar(255)
   runtime          Int
-  country          String
-  language         String
-  imdb_score       Decimal
+  country          String  @db.VarChar(255)
+  language         String  @db.VarChar(255)
+  imdb_score       Decimal @db.Decimal
   imdb_votes       Int
-  metacritic_score Decimal
+  metacritic_score Decimal @db.Decimal
 }
