@@ -55,12 +55,11 @@ export default async function Home({
 
         <div className="mt-6 w-full grid grid-cols-5 gap-6">
           {movies.map((movie) => (
-            <div className="w-full" key={movie.id}>
+            <div className="relative w-full aspect-[2/3]" key={movie.id}>
               <Image
                 alt={movie.title}
-                width={200}
-                height={300}
-                className="w-full object-cover rounded-lg shadow-sm shadow-black"
+                fill
+                className="absolute inset-0 object-cover rounded-lg shadow-sm shadow-black"
                 src={`https://img.omdbapi.com/?apikey=ba958b67&i=${movie.imdb_id}`}
               />
             </div>
@@ -75,3 +74,5 @@ export default async function Home({
 
   // return <TagList tags={tags} />;
 }
+
+export const runtime = "nodejs";
