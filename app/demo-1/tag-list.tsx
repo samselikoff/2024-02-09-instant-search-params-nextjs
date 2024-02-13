@@ -1,12 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useOptimistic, useTransition } from "react";
+import { useEffect, useOptimistic, useTransition } from "react";
+import { createGlobalState } from "react-hooks-global-state";
+
+export const { useGlobalState } = createGlobalState({ pending: false });
 
 export default function TagList({ genres }: { genres: string[] }) {
   let router = useRouter();
   let [pending, startTransition] = useTransition();
+  let [, setGlobalPending] = useGlobalState("pending");
   let [optimisticGenres, setOptimisticGenres] = useOptimistic(genres);
+
+  useEffect(() => {
+    setGlobalPending(pending);
+  }, [pending, setGlobalPending]);
 
   function removeGenre(value: string) {
     let newGenres = optimisticGenres.filter((genre) => genre !== value);
@@ -20,11 +28,11 @@ export default function TagList({ genres }: { genres: string[] }) {
 
   function pushGenres(genres: string[]) {
     let newParams = new URLSearchParams(
-      genres.map((genre) => ["genre", genre])
+      genres.sort().map((genre) => ["genre", genre])
     );
 
     startTransition(() => {
-      setOptimisticGenres(genres);
+      setOptimisticGenres(genres.sort());
 
       router.push(`?${newParams}`, { scroll: false });
     });
@@ -32,15 +40,33 @@ export default function TagList({ genres }: { genres: string[] }) {
 
   return (
     <div className="shrink-0">
-      <div className="sticky top-0 w-60 bg-gray-600 rounded-lg p-4">
+      <h1 className="text-3xl font-semibold tracking-tight text-white">
+        Popular movies
+      </h1>
+
+      <div className="sticky top-6 mt-6 w-60 bg-gray-600 rounded-lg p-4">
         <h2 className="text-gray-100 tracking-tight font-semibold text-xl">
           Genre
         </h2>
 
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap gap-y-2 gap-x-1">
           {GENRES.map((genre) => (
-            <label key={genre} className="flex gap-2 items-center">
-              <input
+            <button
+              onClick={() => {
+                if (optimisticGenres.includes(genre)) {
+                  removeGenre(genre);
+                } else {
+                  addGenre(genre);
+                }
+              }}
+              key={genre}
+              className={`${
+                optimisticGenres.includes(genre)
+                  ? "bg-sky-500 text-white border-sky-500"
+                  : "border-gray-500 hover:border-white"
+              } px-3 py-1 rounded-full font-medium border text-sm`}
+            >
+              {/* <input
                 checked={optimisticGenres.includes(genre)}
                 onChange={(e) => {
                   let { name, checked } = e.target;
@@ -52,9 +78,9 @@ export default function TagList({ genres }: { genres: string[] }) {
                 }}
                 type="checkbox"
                 name={genre}
-              />
+              /> */}
               {genre}
-            </label>
+            </button>
           ))}
         </div>
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import TagList from "./tag-list";
 import { PrismaClient } from "@prisma/client";
+import Transition from "./transition";
 const prisma = new PrismaClient();
 
 export default async function Home({
@@ -44,15 +45,17 @@ export default async function Home({
   ]);
 
   return (
-    <div className="max-w-7xl mx-auto flex gap-6 p-12">
+    <div className="max-w-7xl mx-auto p-12 flex gap-6">
       <TagList genres={genres} />
 
-      <div className="grow">
-        <p>{movies.length} results</p>
+      <Transition className="grow" pendingClassName="animate-pulse">
+        <p className="leading-9">
+          <span className="font-semibold">{movies.length}</span> results
+        </p>
 
-        <div className="mt-4 w-full grid grid-cols-5 gap-6">
+        <div className="mt-6 w-full grid grid-cols-5 gap-6">
           {movies.map((movie) => (
-            <div className="flex" key={movie.id}>
+            <div className="w-full" key={movie.id}>
               <Image
                 alt={movie.title}
                 width={200}
@@ -63,7 +66,7 @@ export default async function Home({
             </div>
           ))}
         </div>
-      </div>
+      </Transition>
     </div>
   );
 
