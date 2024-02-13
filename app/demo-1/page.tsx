@@ -2,6 +2,7 @@ import Image from "next/image";
 import TagList from "./tag-list";
 import { PrismaClient } from "@prisma/client";
 import Transition from "./transition";
+import URLBar from "./url-bar";
 const prisma = new PrismaClient();
 
 export default async function Home({
@@ -26,7 +27,7 @@ export default async function Home({
   } else {
     moviesPromise = prisma.movies.findMany({
       where: {
-        OR: genres.map((genre) => ({
+        AND: genres.map((genre) => ({
           genres: {
             contains: genre,
           },
@@ -45,34 +46,47 @@ export default async function Home({
   ]);
 
   return (
-    <div className="max-w-7xl mx-auto p-12 flex gap-6">
-      <TagList genres={genres} />
+    <>
+      <URLBar />
 
-      <Transition className="grow" pendingClassName="animate-pulse">
-        <p className="leading-9">
-          <span className="font-semibold">{movies.length}</span> results
-        </p>
+      <div className="isolate max-w-7xl mx-auto px-6 py-4 lg:p-12 flex gap-6 ">
+        <div className="shrink-0 relative">
+          <div className="sticky top-16">
+            <h1 className="text-3xl font-semibold tracking-tight text-white">
+              Top movies
+            </h1>
 
-        <div className="mt-6 w-full grid grid-cols-5 gap-6">
-          {movies.map((movie) => (
-            <div className="relative w-full aspect-[2/3]" key={movie.id}>
-              <Image
-                alt={movie.title}
-                fill
-                className="absolute inset-0 object-cover rounded-lg shadow-sm shadow-black"
-                src={`https://img.omdbapi.com/?apikey=ba958b67&i=${movie.imdb_id}`}
-              />
-            </div>
-          ))}
+            <TagList genres={genres} />
+          </div>
         </div>
-      </Transition>
-    </div>
+
+        <Transition className="grow" pendingClassName="animate-pulse">
+          <p className="leading-9 text-right">
+            <span className="font-semibold">{movies.length}</span> results
+          </p>
+          <div className="mt-6 w-full grid grid-cols-3 lg:grid-cols-5 gap-6">
+            {movies.length === 0 ? (
+              <p className="text-center text-gray-400 col-span-full">
+                No movies found.
+              </p>
+            ) : (
+              movies.map((movie) => (
+                <div className="relative w-full aspect-[2/3]" key={movie.id}>
+                  <Image
+                    alt={movie.title}
+                    fill
+                    sizes="300px"
+                    className="absolute inset-0 object-cover rounded-lg shadow-sm shadow-black"
+                    src={`https://img.omdbapi.com/?apikey=2e4d632&i=${movie.imdb_id}`}
+                  />
+                </div>
+              ))
+            )}
+          </div>
+        </Transition>
+      </div>
+    </>
   );
-
-  // Fetch the content...
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // return <TagList tags={tags} />;
 }
 
 export const runtime = "nodejs";

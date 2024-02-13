@@ -34,19 +34,15 @@ export default function TagList({ genres }: { genres: string[] }) {
     startTransition(() => {
       setOptimisticGenres(genres.sort());
 
-      router.push(`?${newParams}`, { scroll: false });
+      router.push(`?${newParams}`);
     });
   }
 
   return (
-    <div className="shrink-0">
-      <h1 className="text-3xl font-semibold tracking-tight text-white">
-        Popular movies
-      </h1>
-
-      <div className="sticky top-6 mt-6 w-60 bg-gray-600 rounded-lg p-4">
-        <h2 className="text-gray-100 tracking-tight font-semibold text-xl">
-          Genre
+    <div className="mt-6 w-60 bg-gray-700 rounded shadow-md shadow-gray-950/30">
+      <div className="p-4">
+        <h2 className="text-gray-100 tracking-tight font-semibold text-lg">
+          Genres
         </h2>
 
         <div className="mt-4 flex flex-wrap gap-y-2 gap-x-1">
@@ -62,56 +58,39 @@ export default function TagList({ genres }: { genres: string[] }) {
               key={genre}
               className={`${
                 optimisticGenres.includes(genre)
-                  ? "bg-sky-500 text-white border-sky-500"
-                  : "border-gray-500 hover:border-white"
+                  ? "bg-accent text-white border-accent "
+                  : "border-gray-500 hover:border-gray-400"
               } px-3 py-1 rounded-full font-medium border text-sm`}
             >
               {/* <input
-                checked={optimisticGenres.includes(genre)}
-                onChange={(e) => {
-                  let { name, checked } = e.target;
-                  if (checked) {
-                    addGenre(name);
-                  } else {
-                    removeGenre(name);
-                  }
-                }}
-                type="checkbox"
-                name={genre}
-              /> */}
+                    checked={optimisticGenres.includes(genre)}
+                    onChange={(e) => {
+                      let { name, checked } = e.target;
+                      if (checked) {
+                        addGenre(name);
+                      } else {
+                        removeGenre(name);
+                      }
+                    }}
+                    type="checkbox"
+                    name={genre}
+                  /> */}
               {genre}
             </button>
           ))}
         </div>
+      </div>
 
-        <div className="mt-4">
+      {optimisticGenres.length > 0 && (
+        <div className="border-t p-2 border-gray-600">
           <button
-            className="bg-gray-100 px-2 text-sm font-medium py-1 text-gray-900 hover:bg-white rounded"
+            className="text-sm py-2 rounded hover:bg-gray-600 font-medium w-full text-center"
             onClick={() => pushGenres([])}
           >
-            Clear
+            Clear genres
           </button>
         </div>
-
-        {/* <div className="mt-4">
-          <div>Params (client):</div>
-          <div>
-            {optimisticGenres.map((genre) => (
-              <p key={genre}>{genre}</p>
-            ))}
-          </div>
-        </div> */}
-      </div>
-      {/* <div className={`${pending ? "opacity-50 delay-[60ms]" : ""} p-4`}>
-      <div>
-        <div>Params (server):</div>
-        <div>
-          {tags.map((tag) => (
-            <p key={tag}>{tag}</p>
-          ))}
-        </div>
-      </div>
-    </div> */}
+      )}
     </div>
   );
 }
