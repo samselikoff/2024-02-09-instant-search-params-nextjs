@@ -1,5 +1,5 @@
 import Image from "next/image";
-import TagList from "./tag-list";
+import GenresPanel from "./genres-panel";
 import { PrismaClient } from "@prisma/client";
 import Transition from "./transition";
 import URLBar from "./url-bar";
@@ -56,7 +56,7 @@ export default async function Home({
               Top movies
             </h1>
 
-            <TagList genres={genres} />
+            <GenresPanel genres={genres} />
           </div>
         </div>
 

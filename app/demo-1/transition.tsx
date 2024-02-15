@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useGlobalState } from "./tag-list";
+import { useGlobalState } from "./genres-panel";
 
 export default function Transition({
   className,

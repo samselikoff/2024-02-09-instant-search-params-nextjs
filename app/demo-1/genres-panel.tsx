@@ -6,7 +6,7 @@ import { createGlobalState } from "react-hooks-global-state";
 
 export const { useGlobalState } = createGlobalState({ pending: false });
 
-export default function TagList({ genres }: { genres: string[] }) {
+export default function GenresPanel({ genres }: { genres: string[] }) {
   let router = useRouter();
   let [pending, startTransition] = useTransition();
   let [, setGlobalPending] = useGlobalState("pending");
