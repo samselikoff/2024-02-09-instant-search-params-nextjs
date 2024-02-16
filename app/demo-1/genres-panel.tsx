@@ -39,7 +39,7 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
   }
 
   return (
-    <div className="mt-6 w-60 bg-gray-700 rounded shadow-md shadow-gray-950/30">
+    <div className="mt-6 w-60 bg-gray-700 rounded-md shadow-md shadow-gray-950/30">
       <div className="p-4">
         <h2 className="text-gray-100 tracking-tight font-semibold text-lg">
           Genres
