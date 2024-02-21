@@ -8,17 +8,7 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
   let [optimisticGenres, setOptimsticGenres] = useOptimistic(genres);
   let [pending, startTransition] = useTransition();
 
-  function removeGenre(genre: string) {
-    let newGenres = optimisticGenres.filter((g) => g !== genre);
-    pushGenres(newGenres);
-  }
-
-  function addGenre(genre: string) {
-    let newGenres = [...optimisticGenres, genre];
-    pushGenres(newGenres);
-  }
-
-  function pushGenres(genres: string[]) {
+  function updateGenres(genres: string[]) {
     let newParams = new URLSearchParams(
       genres.map((genre) => ["genre", genre])
     );
@@ -37,14 +27,14 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
             checked={optimisticGenres.includes(i)}
             onChange={(e) => {
               let { name, checked } = e.target;
-              if (checked) {
-                addGenre(name);
-              } else {
-                removeGenre(name);
-              }
+              let newGenres = checked
+                ? [...optimisticGenres, name]
+                : optimisticGenres.filter((g) => g !== name);
+
+              updateGenres(newGenres);
             }}
-            type="checkbox"
             name={i}
+            type="checkbox"
             className="accent-blue-500"
           />
           Genre {i}
@@ -54,7 +44,7 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
       <div className="mt-4">
         <button
           className="bg-gray-100 px-2 text-sm font-medium py-1 text-gray-900 hover:bg-white rounded"
-          onClick={() => pushGenres([])}
+          onClick={() => updateGenres([])}
         >
           Clear
         </button>
