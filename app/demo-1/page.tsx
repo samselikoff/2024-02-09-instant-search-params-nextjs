@@ -1,7 +1,9 @@
 import Image from "next/image";
-import GenresPanel from "./genres-panel";
+import GenresPanel, {
+  GenresPanelProvider,
+  GenresPanelTransition,
+} from "./genres-panel";
 import { PrismaClient } from "@prisma/client";
-import Transition from "./transition";
 import URLBar from "./url-bar";
 const prisma = new PrismaClient();
 
@@ -46,7 +48,7 @@ export default async function Home({
   ]);
 
   return (
-    <>
+    <GenresPanelProvider>
       <URLBar />
 
       <div className="isolate max-w-7xl mx-auto px-6 py-4 lg:p-12 flex gap-6 ">
@@ -60,7 +62,10 @@ export default async function Home({
           </div>
         </div>
 
-        <Transition className="grow" pendingClassName="animate-pulse">
+        <GenresPanelTransition
+          className="grow"
+          pendingClassName="animate-pulse"
+        >
           <p className="leading-9 text-right">
             <span className="font-semibold">{movies.length}</span> results
           </p>
@@ -83,9 +88,9 @@ export default async function Home({
               ))
             )}
           </div>
-        </Transition>
+        </GenresPanelTransition>
       </div>
-    </>
+    </GenresPanelProvider>
   );
 }
 

@@ -1,20 +1,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useOptimistic, useTransition } from "react";
-import { createGlobalState } from "react-hooks-global-state";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useOptimistic,
+  useTransition,
+} from "react";
 
-export const { useGlobalState } = createGlobalState({ pending: false });
+const GenresPanelContext = createContext<ReturnType<typeof useTransition>>([
+  false,
+  () => {},
+]);
 
 export default function GenresPanel({ genres }: { genres: string[] }) {
   let router = useRouter();
-  let [pending, startTransition] = useTransition();
-  let [, setGlobalPending] = useGlobalState("pending");
+  let [, startTransition] = useContext(GenresPanelContext);
   let [optimisticGenres, setOptimisticGenres] = useOptimistic(genres);
-
-  useEffect(() => {
-    setGlobalPending(pending);
-  }, [pending, setGlobalPending]);
 
   function removeGenre(value: string) {
     let newGenres = optimisticGenres.filter((genre) => genre !== value);
@@ -62,19 +65,6 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
                   : "border-gray-500 hover:border-gray-400"
               } px-3 py-1 rounded-full font-medium border text-sm`}
             >
-              {/* <input
-                    checked={optimisticGenres.includes(genre)}
-                    onChange={(e) => {
-                      let { name, checked } = e.target;
-                      if (checked) {
-                        addGenre(name);
-                      } else {
-                        removeGenre(name);
-                      }
-                    }}
-                    type="checkbox"
-                    name={genre}
-                  /> */}
               {genre}
             </button>
           ))}
@@ -91,6 +81,32 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+export function GenresPanelProvider({ children }: { children: ReactNode }) {
+  return (
+    <GenresPanelContext.Provider value={useTransition()}>
+      {children}
+    </GenresPanelContext.Provider>
+  );
+}
+
+export function GenresPanelTransition({
+  className,
+  pendingClassName,
+  children,
+}: {
+  className: string;
+  pendingClassName: string;
+  children: ReactNode;
+}) {
+  let [pending] = useContext(GenresPanelContext);
+
+  return (
+    <div className={`${pending ? pendingClassName : ""} ${className}`}>
+      {children}
     </div>
   );
 }
