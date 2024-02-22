@@ -18,41 +18,44 @@ export default function URLBar() {
   url.search = searchParams.toString();
 
   return (
-    <div className="shadow p-2 bg-gray-700 flex gap-2 z-10 sticky top-0 items-center">
-      <div className="flex gap-1">
-        <button
-          disabled={isReloading}
-          className="p-2 rounded-full enabled:hover:bg-gray-600 enabled:transition disabled:opacity-50 text-gray-400"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          <ArrowLeftIcon className="w-4 h-4" />
-        </button>
-        <button
-          disabled={isReloading}
-          className="p-2 rounded-full enabled:hover:bg-gray-600 enabled:transition disabled:opacity-50 text-gray-400"
-          onClick={() => {
-            router.forward();
-          }}
-        >
-          <ArrowRightIcon className="w-4 h-4" />
-        </button>
-        <button
-          className="p-2 rounded-full enabled:hover:bg-gray-600 enabled:transition text-gray-400 disabled:opacity-50"
-          disabled={isReloading}
-          onClick={() => {
-            setIsReloading(true);
-            window.location.reload();
-          }}
-        >
-          <ArrowPathIcon className="w-4 h-4" />
-        </button>
+    <>
+      <div /> {/* https://github.com/vercel/next.js/issues/28778 */}
+      <div className="shadow p-2 bg-gray-700 flex gap-2 z-10 sticky top-0 items-center">
+        <div className="flex gap-1">
+          <button
+            disabled={isReloading}
+            className="p-2 rounded-full enabled:hover:bg-gray-600 enabled:transition disabled:opacity-50 text-gray-400"
+            onClick={() => {
+              router.back();
+            }}
+          >
+            <ArrowLeftIcon className="w-4 h-4" />
+          </button>
+          <button
+            disabled={isReloading}
+            className="p-2 rounded-full enabled:hover:bg-gray-600 enabled:transition disabled:opacity-50 text-gray-400"
+            onClick={() => {
+              router.forward();
+            }}
+          >
+            <ArrowRightIcon className="w-4 h-4" />
+          </button>
+          <button
+            className="p-2 rounded-full enabled:hover:bg-gray-600 enabled:transition text-gray-400 disabled:opacity-50"
+            disabled={isReloading}
+            onClick={() => {
+              setIsReloading(true);
+              window.location.reload();
+            }}
+          >
+            <ArrowPathIcon className="w-4 h-4" />
+          </button>
+        </div>
+        <span className="bg-gray-800/50 rounded-full truncate grow px-3 py-1.5 text-gray-400 font-medium text-sm">
+          {pathname}
+          {url.search}
+        </span>
       </div>
-      <span className="bg-gray-800/50 rounded-full truncate grow px-3 py-1.5 text-gray-400 font-medium text-sm">
-        {pathname}
-        {url.search}
-      </span>
-    </div>
+    </>
   );
 }

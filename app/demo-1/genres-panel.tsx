@@ -1,22 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useOptimistic,
-  useTransition,
-} from "react";
-
-const GenresPanelContext = createContext<ReturnType<typeof useTransition>>([
-  false,
-  () => {},
-]);
+import { useOptimistic, useTransition } from "react";
 
 export default function GenresPanel({ genres }: { genres: string[] }) {
   let router = useRouter();
-  let [, startTransition] = useContext(GenresPanelContext);
+  let [pending, startTransition] = useTransition();
   let [optimisticGenres, setOptimisticGenres] = useOptimistic(genres);
 
   function removeGenre(value: string) {
@@ -42,7 +31,10 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
   }
 
   return (
-    <div className="mt-6 w-60 bg-gray-700 rounded-md shadow-md shadow-gray-950/30">
+    <div
+      data-pending={pending ? "" : undefined}
+      className="mt-6 w-60 bg-gray-700 rounded-md shadow-md shadow-gray-950/30"
+    >
       <div className="p-4">
         <h2 className="text-gray-100 tracking-tight font-semibold text-lg">
           Genres
@@ -81,32 +73,6 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
           </button>
         </div>
       )}
-    </div>
-  );
-}
-
-export function GenresPanelProvider({ children }: { children: ReactNode }) {
-  return (
-    <GenresPanelContext.Provider value={useTransition()}>
-      {children}
-    </GenresPanelContext.Provider>
-  );
-}
-
-export function GenresPanelTransition({
-  className,
-  pendingClassName,
-  children,
-}: {
-  className: string;
-  pendingClassName: string;
-  children: ReactNode;
-}) {
-  let [pending] = useContext(GenresPanelContext);
-
-  return (
-    <div className={`${pending ? pendingClassName : ""} ${className}`}>
-      {children}
     </div>
   );
 }
