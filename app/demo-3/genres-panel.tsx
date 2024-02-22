@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function GenresPanel({ genres }: { genres: string[] }) {
   let router = useRouter();
-  let searchParams = useSearchParams();
-  // let g
 
   return (
     <div className="bg-gray-700 rounded w-60 shadow-md shadow-gray-950/30 p-4">
@@ -13,20 +11,19 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
         <label key={genre} className="flex gap-2 items-center">
           <input
             onChange={(e) => {
-              let newGenres;
-              if (e.target.checked) {
-                newGenres = [...genres, genre];
-              } else {
-                newGenres = genres.filter((g) => g !== genre);
-              }
+              let { name, checked } = e.target;
+              let newGenres = checked
+                ? [...genres, name]
+                : genres.filter((g) => g !== name);
 
               let newParams = new URLSearchParams(
                 newGenres.map((genre) => ["genre", genre])
               );
+
               router.push(`?${newParams}`);
             }}
-            type="checkbox"
             name={genre}
+            type="checkbox"
             className="accent-blue-500"
           />
           Genre {genre}
@@ -36,16 +33,14 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
       <div className="mt-4">
         <button
           className="bg-gray-100 px-2 text-sm font-medium py-1 text-gray-900 hover:bg-white rounded"
-          onClick={() => {
-            router.push(window.location.pathname);
-          }}
+          onClick={() => router.push(`?`)}
         >
           Clear
         </button>
       </div>
 
       <div className="mt-4">
-        <div>Params (Client):</div>
+        <p>Params (Client):</p>
 
         <div className="mt-2">
           {genres.map((genre) => (

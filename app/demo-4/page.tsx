@@ -1,3 +1,4 @@
+import URLBar from "../demo-1/url-bar";
 import GenresPanel from "./genres-panel";
 
 export default async function Home({
@@ -16,6 +17,8 @@ export default async function Home({
 
   return (
     <div>
+      <URLBar />
+
       <div className="flex">
         <div className="p-6">
           <GenresPanel genres={genres} />

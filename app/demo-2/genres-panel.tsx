@@ -21,10 +21,10 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
 
   return (
     <div className="bg-gray-700 rounded w-60 shadow-md shadow-gray-950/30 p-4">
-      {["1", "2", "3", "4", "5"].map((i) => (
-        <label key={i} className="flex gap-2 items-center">
+      {["1", "2", "3", "4", "5"].map((genre) => (
+        <label key={genre} className="flex gap-2 items-center">
           <input
-            checked={optimisticGenres.includes(i)}
+            checked={optimisticGenres.includes(genre)}
             onChange={(e) => {
               let { name, checked } = e.target;
               let newGenres = checked
@@ -33,11 +33,11 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
 
               updateGenres(newGenres);
             }}
-            name={i}
+            name={genre}
             type="checkbox"
             className="accent-blue-500"
           />
-          Genre {i}
+          Genre {genre}
         </label>
       ))}
 
