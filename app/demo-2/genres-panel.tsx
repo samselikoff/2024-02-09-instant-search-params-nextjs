@@ -20,7 +20,10 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
   }
 
   return (
-    <div className="bg-gray-700 rounded w-60 shadow-md shadow-gray-950/30 p-4">
+    <div
+      data-pending={pending ? "" : undefined}
+      className="bg-gray-700 rounded w-60 shadow-md shadow-gray-950/30 p-4"
+    >
       {["1", "2", "3", "4", "5"].map((genre) => (
         <label key={genre} className="flex gap-2 items-center">
           <input

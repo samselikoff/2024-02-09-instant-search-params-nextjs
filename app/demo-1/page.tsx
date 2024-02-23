@@ -59,7 +59,10 @@ export default async function Home({
           </div>
         </div>
 
-        <div className="grow group-has-[[data-pending]]:animate-pulse">
+        <div
+          className="grow group-has-[[data-pending]]:animate-pulse"
+          style={{ animationDuration: "1.5s" }}
+        >
           <p className="leading-9 text-right">
             <span className="font-semibold">{movies.length}</span> results
           </p>

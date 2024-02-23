@@ -20,7 +20,7 @@ export default function URLBar() {
   return (
     <>
       <div /> {/* https://github.com/vercel/next.js/issues/28778 */}
-      <div className="shadow p-2 bg-gray-700 flex gap-2 z-10 sticky top-0 items-center">
+      <div className="shadow p-2 bg-gray-700/90 backdrop-blur-xl flex gap-2 z-10 sticky top-0 items-center">
         <div className="flex gap-1">
           <button
             disabled={isReloading}
@@ -51,7 +51,7 @@ export default function URLBar() {
             <ArrowPathIcon className="w-4 h-4" />
           </button>
         </div>
-        <span className="bg-gray-800/50 rounded-full truncate grow px-3 py-1.5 text-gray-400 font-medium text-sm">
+        <span className="bg-gray-800/50 rounded-full truncate grow px-3 mr-3 py-1.5 text-gray-400 font-medium text-sm">
           {pathname}
           {url.search}
         </span>
