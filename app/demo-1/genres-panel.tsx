@@ -33,14 +33,14 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
   return (
     <div
       data-pending={pending ? "" : undefined}
-      className="mt-6 w-60 bg-gray-700 rounded-md shadow-md shadow-gray-950/30"
+      className="mt-6 sm:w-60 bg-gray-700 rounded-md shadow-md shadow-gray-950/30"
     >
       <div className="p-4">
         <h2 className="text-gray-100 tracking-tight font-semibold text-lg">
           Genres
         </h2>
 
-        <div className="mt-4 flex flex-wrap gap-y-2 gap-x-1">
+        <div className="mt-4 -mx-4 px-4 sm:px-0 sm:mx-0 pb-3 sm:pb-0 flex overflow-x-scroll sm:overflow-auto sm:flex-wrap gap-y-2 gap-x-1">
           {GENRES.map((genre) => (
             <button
               onClick={() => {
@@ -55,7 +55,7 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
                 optimisticGenres.includes(genre)
                   ? "bg-accent text-white border-accent "
                   : "border-gray-500 hover:border-gray-400"
-              } px-3 py-1 rounded-full font-medium border text-sm`}
+              } px-3 py-1 rounded-full whitespace-nowrap font-medium border text-sm`}
             >
               {genre}
             </button>

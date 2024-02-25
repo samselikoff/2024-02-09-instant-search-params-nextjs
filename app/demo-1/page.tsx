@@ -48,9 +48,9 @@ export default async function Home({
     <>
       <URLBar />
 
-      <div className="group w-full grow isolate max-w-7xl mx-auto px-6 py-4 lg:p-12 flex gap-6">
-        <div className="shrink-0 relative ">
-          <div className="sticky top-16 ">
+      <div className="group w-full grow isolate max-w-7xl mx-auto px-6 py-4 lg:p-12 flex flex-col sm:flex-row gap-4 sm:gap-6">
+        <div className="shrink-0 relative">
+          <div className="sm:sticky sm:top-16 ">
             <h1 className="text-3xl font-semibold tracking-tight text-white">
               Top movies
             </h1>
@@ -66,7 +66,7 @@ export default async function Home({
           <p className="leading-9 text-right">
             <span className="font-semibold">{movies.length}</span> results
           </p>
-          <div className="mt-6 w-full grid grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="mt-6 w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {movies.length === 0 ? (
               <p className="text-center text-gray-400 col-span-full">
                 No movies found.
