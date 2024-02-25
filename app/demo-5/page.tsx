@@ -17,8 +17,8 @@ export default async function Home({
     <div>
       <URLBar />
 
-      <div className="flex">
-        <div className="p-6">
+      <div className="sm:flex group">
+        <div className="p-4 sm:p-6">
           <GenresPanel genres={genres} />
         </div>
 
