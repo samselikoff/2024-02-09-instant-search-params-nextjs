@@ -8,28 +8,6 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
   let [pending, startTransition] = useTransition();
   let [optimisticGenres, setOptimisticGenres] = useOptimistic(genres);
 
-  function removeGenre(value: string) {
-    let newGenres = optimisticGenres.filter((genre) => genre !== value);
-    pushGenres(newGenres);
-  }
-
-  function addGenre(value: string) {
-    let newGenres = [...optimisticGenres, value];
-    pushGenres(newGenres);
-  }
-
-  function pushGenres(genres: string[]) {
-    let newParams = new URLSearchParams(
-      genres.sort().map((genre) => ["genre", genre])
-    );
-
-    startTransition(() => {
-      setOptimisticGenres(genres.sort());
-
-      router.push(`?${newParams}`);
-    });
-  }
-
   return (
     <div
       data-pending={pending ? "" : undefined}
@@ -44,11 +22,19 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
           {GENRES.map((genre) => (
             <button
               onClick={() => {
-                if (optimisticGenres.includes(genre)) {
-                  removeGenre(genre);
-                } else {
-                  addGenre(genre);
-                }
+                let newGenres = !optimisticGenres.includes(genre)
+                  ? [...optimisticGenres, genre]
+                  : optimisticGenres.filter((g) => g !== genre);
+
+                let newParams = new URLSearchParams(
+                  newGenres.sort().map((genre) => ["genre", genre])
+                );
+
+                startTransition(() => {
+                  setOptimisticGenres(newGenres.sort());
+
+                  router.push(`?${newParams}`);
+                });
               }}
               key={genre}
               className={`${
@@ -67,7 +53,13 @@ export default function GenresPanel({ genres }: { genres: string[] }) {
         <div className="border-t p-2 border-gray-600">
           <button
             className="text-sm py-2 rounded hover:bg-gray-600 font-medium w-full text-center"
-            onClick={() => pushGenres([])}
+            onClick={() => {
+              startTransition(() => {
+                setOptimisticGenres([]);
+
+                router.push(`?`);
+              });
+            }}
           >
             Clear genres
           </button>
